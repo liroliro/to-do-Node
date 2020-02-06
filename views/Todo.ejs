@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>To Do</title>
+    <link rel="stylesheet" href="main.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h2 class="header">To do-list</h2>
+      <div class="row">
+        <ul class="todoList">
+          <% Todos.forEach((todo) =>{ %>
+          <li class="todoItem"><%= todo.item %></li>
+          <a href="/delete/<%= todo._id %>">Delete</a>
+          <br />
+          <a href="/update/<%= todo._id %>">Update</a>
+          <% }) %>
+        </ul>
+      </div>
+    </div>
+    <div class="newTodo">
+      <form method="POST">
+        <input type="text" name="todo" placeholder="Input new To Do" />
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+  </body>
+</html>
