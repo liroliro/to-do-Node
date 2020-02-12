@@ -1,38 +1,46 @@
-const express = require("express");
-const Todo = require("../model/todo")
+const express = require('express');
+const Todo = require('../model/todo');
 
 const router = express.Router();
 
-router.get("/", async(req, res)=> {
-    const Todos = await Todo.find();
-    res.render("todo", {Todos});
+const items = 5;
+
+router.get('/', async (req, res) => {
+	let sort = req.query.sort;
+	let pagination = req.query.page;
+
+	const Todos = await Todo.find()
+		.skip((pagination - 1) * items)
+		.limit(items)
+		.sort({ item: sort });
+	res.render('todo', { Todos });
 });
 
-router.post("/", async(req, res)=>{
-    const newTodo = new Todo({
-        item: req.body.todo
-    });
-    newTodo.save((err, suc)=>{
-        err? console.log("Du måste fylla i något!"):
-        res.redirect("/");
-    })
+router.post('/', async (req, res) => {
+	const newTodo = new Todo({
+		item: req.body.todo
+	});
+	newTodo.save((err, suc) => {
+		err ? res.send(err.message) : res.redirect('/');
+	});
 });
 
-router.get("/delete/:id", async(req, res)=> {
-    await Todo.deleteOne({_id: req.params.id});
-    res.redirect("/");
+router.get('/delete/:id', async (req, res) => {
+	await Todo.deleteOne({ _id: req.params.id });
+	res.redirect('/');
 });
 
-router.get("/update/:id", async(req, res)=> {
-    let specificTodo = await Todo.findById({_id: req.params.id});
-    res.render("edit", {specificTodo});
+router.get('/update/:id', async (req, res) => {
+	let specificTodo = await Todo.findById({ _id: req.params.id });
+	res.render('edit', { specificTodo });
 });
 
-router.post("/update/:id", async(req, res)=> {
-    await Todo.updateOne({_id: req.params.id}, {$set: {item: req.body.todo}});
-    res.redirect("/");
+router.post('/update/:id', async (req, res) => {
+	await Todo.updateOne(
+		{ _id: req.params.id },
+		{ $set: { item: req.body.todo } }
+	);
+	res.redirect('/');
 });
-
-
 
 module.exports = router;

@@ -4,8 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index",
-    "startBoth": "nodemon index.js & node-sass -w public -o css"
+    "start": "nodemon index"
   },
   "keywords": [],
   "author": "",
